@@ -10,4 +10,4 @@ RUN tar -xzf /tmp/dental-ai-mass-render-source.tar.gz -C /app \
   && corepack pnpm run build
 
 ENV NODE_ENV=production
-CMD ["sh", "-c", "if [ -f /etc/secrets/DATABASE_URL ]; then export DATABASE_URL="$(cat /etc/secrets/DATABASE_URL)"; fi; exec node dist/index.js"]
+CMD ["sh", "-c", "for f in /etc/secrets/DATABASE_URL /etc/secrets/DATABASE_URL.secret /etc/secrets/database_url; do if [ -s \"$f\" ]; then export DATABASE_URL=\"$(cat \"$f\")\"; break; fi; done; exec node dist/index.js"]
